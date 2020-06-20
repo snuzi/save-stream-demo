@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Piping a fetch response to StreamSaver</title>
+  </head>
+  <body>
+    <button id="$start">Download</button>
+    <script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
+    <script src="https://jimmywarting.github.io/StreamSaver.js/StreamSaver.js"></script>
+    <script>
+      $start.onclick = () => {
+        const fileStream = streamSaver.createWriteStream('file.txt')
+
+        var xhr = new XMLHttpRequest();
+        addListeners(xhr);
+
+        xhr.responseType = 'blob';
+
+        xhr.onreadystatechange = function(e) {
+            //console.log(e.status);
+        };
+
+        xhr.onprogress = function(e) {
+            console.log(`${e.type}-: ${e.loaded} bytes transferred`);
+        };
+
+        xhr.onload = function() {
+           // var response = xhr.responseText;
+            console.log(xhr.response);
+            // more optimized
+            const readableStream = xhr.response.stream();
+            console.log('start writing')
+          if (window.WritableStream && readableStream.pipeTo) {
+            return readableStream.pipeTo(fileStream)
+              .then(() => console.log('done writing'))
+          }
+
+          window.writer = fileStream.getWriter()
+
+          const reader = res.body.getReader()
+          const pump = () => reader.read()
+            .then(res => res.done
+              ? writer.close()
+              : writer.write(res.value).then(pump))
+          pump()
+        }
+
+        var url = 'http://localhost:8088/large-file'
+       // url = 'https://streams.spec.whatwg.org/demos/data/commits.include';
+
+        xhr.open("GET", url);
+        xhr.send();
+
+      }
+
+    function handleEvent(e) {
+        console.log(`${e.type}: ${e.loaded} bytes transferred`);
+    }
+
+    function addListeners(xhr) {
+        xhr.addEventListener('loadstart', handleEvent);
+        xhr.addEventListener('load', handleEvent);
+        xhr.addEventListener('loadend', handleEvent);
+        xhr.addEventListener('progress', handleEvent);
+        xhr.addEventListener('error', handleEvent);
+        xhr.addEventListener('abort', handleEvent);
+    }
+    </script>
+  </body>
+</html>
