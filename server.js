@@ -21,9 +21,8 @@ app.all('/large-file', function (req, res, next) {
 });
 
 
-var sentence = ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"]
-
 app.get('/text', (req, res) => {
+    const sentence = ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"]
 
     res.writeHead(200, {
         'Content-Type': 'text/plain',
@@ -31,9 +30,9 @@ app.get('/text', (req, res) => {
         'Content-Disposition': 'attachment; filename="file-dowlnoad.txt"'
     })
 
-   var i = 0;
+   const i = 0;
 
-   var regId = setInterval(() => {
+   const regId = setInterval(() => {
        res.write(sentence[i++] + "\n");
        if(i >= sentence.length) {
            clearInterval(regId);
