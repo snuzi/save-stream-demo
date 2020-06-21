@@ -12,10 +12,10 @@
     <script>
       $start.onclick = () => {
 
+        var fileStream = streamSaver.createWriteStream('file')
         var writer = fileStream.getWriter()
         window.onunload = () => writer.abort()
 
-       var fileStream = streamSaver.createWriteStream('file')
 
         var xhr = new XMLHttpRequest();
         // addListeners(xhr);
@@ -24,6 +24,8 @@
         var lastIndex = 0;
 
         xhr.onprogress = function(e) {
+            // TODO Handle only 200 responses
+
             console.log(`${e.type}-: ${e.loaded} bytes transferred`);
 
             var currIndex = xhr.responseText.length;
@@ -42,7 +44,7 @@
             console.log('Writing done');
         }
 
-        var url = 'http://localhost:8088/file?file=text.txt'
+        var url = 'http://localhost:8088/file?file=large.txt'
         xhr.open("GET", url);
         xhr.send();
       }

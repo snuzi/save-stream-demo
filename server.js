@@ -1,5 +1,6 @@
 var express = require('express')
-const fs = require('fs')
+const fs = require('fs');
+const { response } = require('express');
 
 var app = express()
 
@@ -10,16 +11,27 @@ app.use('/public', express.static('site'));
 
 // Stream a large size file
 app.all('/file', function (req, res, next) {
+    
+    const fileName = 'files/' + (req.query.file || 'large.zip');
+
+    if (!fs.existsSync(fileName)) {
+        res.status(404).send(new Error('File not found'));
+        return;
+    }
+
     res.writeHead(200, {
         'Content-Type': 'text/plain',
         'Transfer-Encoding': 'chunked',
         'Content-Disposition': 'attachment; filename="large-file.zip"'
     })
 
-    console.log(req.query.file );
-    const fileName = req.query.file || 'large.zip';
-    const readStream = fs.createReadStream(fileName);
-    readStream.pipe(res);
+    try {
+        const readStream = fs.createReadStream(fileName);
+        readStream.pipe(res);
+    }
+    catch(e) {
+        response.status(404).send(new Error('File not found'));
+    }
 });
 
 
