@@ -9,14 +9,16 @@ app.listen(8088);
 app.use('/public', express.static('site'));
 
 // Stream a large size file
-app.all('/large-file', function (req, res, next) {
+app.all('/file', function (req, res, next) {
     res.writeHead(200, {
         'Content-Type': 'text/plain',
         'Transfer-Encoding': 'chunked',
         'Content-Disposition': 'attachment; filename="large-file.zip"'
     })
 
-    const readStream = fs.createReadStream('./large.zip');
+    console.log(req.query.file );
+    const fileName = req.query.file || 'large.zip';
+    const readStream = fs.createReadStream(fileName);
     readStream.pipe(res);
 });
 
