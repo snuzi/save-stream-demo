@@ -12,10 +12,17 @@
     <script>
       $start.onclick = () => {
 
+<<<<<<< HEAD
         var fileStream = streamSaver.createWriteStream('file')
         var writer = fileStream.getWriter()
         window.onunload = () => writer.abort()
 
+=======
+        var writer = fileStream.getWriter()
+        window.onunload = () => writer.abort()
+
+       var fileStream = streamSaver.createWriteStream('file')
+>>>>>>> 238e4a89b50bef8f1b9b865a9f8c37d926ccbfa0
 
         var xhr = new XMLHttpRequest();
         // addListeners(xhr);
@@ -24,8 +31,11 @@
         var lastIndex = 0;
 
         xhr.onprogress = function(e) {
+<<<<<<< HEAD
             // TODO Handle only 200 responses
 
+=======
+>>>>>>> 238e4a89b50bef8f1b9b865a9f8c37d926ccbfa0
             console.log(`${e.type}-: ${e.loaded} bytes transferred`);
 
             var currIndex = xhr.responseText.length;
@@ -44,7 +54,11 @@
             console.log('Writing done');
         }
 
+<<<<<<< HEAD
         var url = 'http://localhost:8088/file?file=large.txt'
+=======
+        var url = 'http://localhost:8088/file?file=text.txt'
+>>>>>>> 238e4a89b50bef8f1b9b865a9f8c37d926ccbfa0
         xhr.open("GET", url);
         xhr.send();
       }
