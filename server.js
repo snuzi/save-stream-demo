@@ -1,10 +1,6 @@
 var express = require('express')
-<<<<<<< HEAD
 const fs = require('fs');
 const { response } = require('express');
-=======
-const fs = require('fs')
->>>>>>> 238e4a89b50bef8f1b9b865a9f8c37d926ccbfa0
 
 var app = express()
 
@@ -15,7 +11,6 @@ app.use('/public', express.static('site'));
 
 // Stream a large size file
 app.all('/file', function (req, res, next) {
-<<<<<<< HEAD
     
     const fileName = 'files/' + (req.query.file || 'large.zip');
 
@@ -24,15 +19,12 @@ app.all('/file', function (req, res, next) {
         return;
     }
 
-=======
->>>>>>> 238e4a89b50bef8f1b9b865a9f8c37d926ccbfa0
     res.writeHead(200, {
         'Content-Type': 'text/plain',
         'Transfer-Encoding': 'chunked',
         'Content-Disposition': 'attachment; filename="large-file.zip"'
     })
 
-<<<<<<< HEAD
     try {
         const readStream = fs.createReadStream(fileName);
         readStream.pipe(res);
@@ -40,12 +32,6 @@ app.all('/file', function (req, res, next) {
     catch(e) {
         response.status(404).send(new Error('File not found'));
     }
-=======
-    console.log(req.query.file );
-    const fileName = req.query.file || 'large.zip';
-    const readStream = fs.createReadStream(fileName);
-    readStream.pipe(res);
->>>>>>> 238e4a89b50bef8f1b9b865a9f8c37d926ccbfa0
 });
 
 
